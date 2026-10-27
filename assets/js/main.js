@@ -59,19 +59,6 @@
     nodes[p.id] = { poly: poly, label: label };
   });
 
-  var list = document.getElementById("freeList");
-  Object.keys(PRICES).map(Number).sort(function (a, b) { return a - b; }).forEach(function (id) {
-    var d = PRICES[id];
-    var li = document.createElement("li");
-    var b = document.createElement("button");
-    b.type = "button";
-    b.innerHTML = '<span class="fl-num">№' + id + (d.status === "reserved" ? " · бронь" : "") +
-      '</span><span class="fl-meta">' + sotki(d.area) + " · " + millions(d.price) + " млн ₽</span>";
-    b.addEventListener("click", function () { select(id); });
-    li.appendChild(b);
-    list.appendChild(li);
-  });
-
   var current = null;
   function field(name) { return plotView.querySelector('[data-f="' + name + '"]'); }
   function select(id) {
@@ -115,6 +102,79 @@
     chosen.querySelector("b").textContent = "№" + current;
     chosen.hidden = false;
   });
+
+  /* ── Карта «Что рядом» ── */
+  var NEAR = window.NEARBY;
+  var mapEl = document.getElementById("nearMap");
+  if (NEAR && window.L && mapEl) {
+    var CATS = {
+      school:       { label: "Школы",          color: "#3f7fd8", icon: "🎓" },
+      kindergarten: { label: "Детские сады",   color: "#e28a3b", icon: "🧸" },
+      health:       { label: "Здоровье",       color: "#d9534f", icon: "✚" },
+      shop:         { label: "Магазины",       color: "#7a5bc7", icon: "🛒" },
+      food:         { label: "Кафе и рестораны", color: "#c0821c", icon: "☕" },
+      leisure:      { label: "Отдых",          color: "#3c9a5f", icon: "🌳" }
+    };
+    var home = [NEAR.village.lat, NEAR.village.lon];
+    var map = L.map(mapEl, { scrollWheelZoom: false, tap: true, zoomControl: true }).setView(home, 12);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 18, className: "map-tiles",
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+    var houseSvg = '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 8 L27 20 H23 L29 29 H11 L17 20 H13 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M20 29 V33" stroke="currentColor" stroke-width="2"/></svg>';
+    L.marker(home, {
+      icon: L.divIcon({ className: "", html: '<div class="pin pin--home">' + houseSvg + "</div>", iconSize: [46, 46], iconAnchor: [23, 23] }),
+      zIndexOffset: 1000
+    }).addTo(map).bindPopup("<b>" + NEAR.village.name + "</b>Здесь ваш будущий участок");
+
+    var items = NEAR.points.slice().sort(function (a, b) { return a.km - b.km; }).map(function (p) {
+      var c = CATS[p.cat];
+      var km = p.km.toLocaleString("ru-RU") + " км";
+      var marker = L.marker([p.lat, p.lon], {
+        icon: L.divIcon({ className: "", html: '<div class="pin" style="--c:' + c.color + '">' + c.icon + "</div>", iconSize: [32, 32], iconAnchor: [16, 16] })
+      }).bindPopup("<b>" + p.name + "</b>" + km + " от посёлка");
+      var li = document.createElement("li");
+      li.style.setProperty("--c", c.color);
+      li.innerHTML = "<i>" + c.icon + '</i><span class="n-name"></span><span class="n-km">' + km + "</span>";
+      li.querySelector(".n-name").textContent = p.name;
+      li.addEventListener("click", function () {
+        map.flyTo([p.lat, p.lon], 14, { duration: .6 });
+        marker.openPopup();
+        if (window.matchMedia("(max-width: 899px)").matches) mapEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+      return { p: p, marker: marker, li: li };
+    });
+    var listEl = document.getElementById("nearList");
+    items.forEach(function (it) { listEl.appendChild(it.li); });
+
+    var chipsEl = document.getElementById("nearChips");
+    var active = "all";
+    function chip(key, label, color) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip";
+      b.setAttribute("aria-pressed", key === active ? "true" : "false");
+      b.innerHTML = (color ? '<i style="--c:' + color + '"></i>' : "") + label;
+      b.addEventListener("click", function () { active = key; apply(); });
+      b.dataset.key = key;
+      chipsEl.appendChild(b);
+    }
+    chip("all", "Все");
+    Object.keys(CATS).forEach(function (k) { chip(k, CATS[k].label, CATS[k].color); });
+    function apply() {
+      var shown = [L.latLng(home)];
+      items.forEach(function (it) {
+        var on = active === "all" || it.p.cat === active;
+        it.li.hidden = !on;
+        if (on) { it.marker.addTo(map); shown.push(it.marker.getLatLng()); } else { map.removeLayer(it.marker); }
+      });
+      chipsEl.querySelectorAll(".chip").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.key === active ? "true" : "false"); });
+      map.closePopup();
+      map.flyToBounds(L.latLngBounds(shown), { padding: [36, 36], maxZoom: 14, duration: .6 });
+    }
+    items.forEach(function (it) { it.marker.addTo(map); });
+    map.fitBounds(L.latLngBounds([L.latLng(home)].concat(items.filter(function (it) { return it.p.km < 6; }).map(function (it) { return it.marker.getLatLng(); }))), { padding: [30, 30] });
+  }
 
   /* ── Шапка при прокрутке ── */
   var bar = document.querySelector(".topbar");
