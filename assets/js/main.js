@@ -13,6 +13,9 @@
     .filter(function (id) { return PRICES[id].status === "free"; })
     .sort(function (a, b) { return a - b; });
   document.querySelectorAll("[data-free-count]").forEach(function (el) { el.textContent = free.length; });
+  document.querySelectorAll("[data-total-count]").forEach(function (el) { var n = window.PLAN.plots.length;
+    el.textContent = n + (n % 10 === 1 && n % 100 !== 11 ? " участка" : " участков");
+  });
   var available = Object.keys(PRICES).map(function (id) { return PRICES[id]; });
   if (available.length) {
     var min = Math.min.apply(null, available.map(function (p) { return p.price; }));
