@@ -13,7 +13,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -77,7 +76,7 @@
   <h2 class="h2 features__title reveal" id="feat-title">Здесь хорошо жить</h2>
   <div class="features__grid">
     <article class="tile tile--tall reveal" id="neighbours">
-      <img class="tile__media" loading="lazy" src="assets/img/neighbours-s.webp" srcset="assets/img/neighbours-s.webp 720w, assets/img/neighbours.webp 1400w" sizes="(min-width: 700px) 50vw, 100vw" alt="Дом соседей среди берёз">
+      <video class="tile__media" src="assets/video/neighbours.mp4" poster="assets/img/neighbours-poster.webp" autoplay muted loop playsinline preload="metadata" aria-label="Обустроенные участки соседей"></video>
       <div class="tile__text"><h3>Соседи</h3><p>Уже построились, обустроили участки и сделали ландшафтный дизайн</p></div>
     </article>
     <article class="tile reveal">
@@ -173,7 +172,7 @@
     </div>
     <div class="location__foot">
       <a class="btn btn--dark" href="https://yandex.ru/maps/org/kp_lesnoye_ozherelye/209354364429/" target="_blank" rel="noopener">Построить маршрут</a>
-      <p class="location__note">Расстояния до мест — по прямой.</p>
+      <p class="location__note">Расстояния до мест — по прямой. Нажмите на место в списке — карта покажет его.</p>
     </div>
   </div>
 </section>
@@ -232,7 +231,7 @@
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z" fill="currentColor"/></svg>
 </a>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
 <script src="assets/js/plan.js"></script>
 <script src="assets/js/prices.js"></script>
 <script src="assets/js/nearby.js"></script>

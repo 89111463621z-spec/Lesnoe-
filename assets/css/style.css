@@ -312,7 +312,7 @@ a { color: inherit; }
 .nearmap { height: 380px; border-radius: var(--radius-l); overflow: hidden; background: var(--paper-2); z-index: 0; }
 .nearlist { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; max-height: 340px; overflow-y: auto; }
 .nearlist li { display: flex; align-items: center; gap: 12px; padding: 11px 14px; background: #fff; border-radius: 14px; cursor: pointer; }
-.nearlist i { flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; background: var(--c); display: grid; place-items: center; color: #fff; font-style: normal; font-size: 15px; }
+.nearlist i { flex-shrink: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--c); }
 .nearlist .n-name { flex: 1; font-weight: 600; font-size: 15px; line-height: 1.3; }
 .nearlist .n-km { color: var(--ink-soft); font-size: 14px; white-space: nowrap; }
 .location__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 18px; }
@@ -325,14 +325,6 @@ a { color: inherit; }
   .nearlist { max-height: 520px; align-content: start; }
   .location__foot .btn { width: auto; }
 }
-/* маркеры на карте */
-.pin { width: 32px; height: 32px; border-radius: 50%; background: var(--c); color: #fff; display: grid; place-items: center; font-size: 15px; border: 2px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,.25); }
-.pin--home { width: 46px; height: 46px; background: var(--forest-800); font-size: 0; }
-.pin--home svg { width: 28px; height: 28px; color: #fff; }
-.leaflet-popup-content { font: 500 14px/1.4 var(--font-body); margin: 10px 14px; }
-.leaflet-popup-content b { display: block; font-weight: 700; }
-.leaflet-container { font-family: var(--font-body); }
-
 /* ── Галерея по сезонам ── */
 .gallery { max-width: 1280px; margin: 0 auto; }
 .gallery .h2 { text-align: center; margin-bottom: 24px; }

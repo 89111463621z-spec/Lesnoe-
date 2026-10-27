@@ -103,47 +103,46 @@
     chosen.hidden = false;
   });
 
-  /* ── Карта «Что рядом» ── */
+  /* ── Карта «Что рядом» (Яндекс Карты) ── */
   var NEAR = window.NEARBY;
   var mapEl = document.getElementById("nearMap");
-  if (NEAR && window.L && mapEl) (function () {
+  if (NEAR && window.ymaps && mapEl) ymaps.ready(function () {
     var CATS = {
-      school:       { label: "Школы",            color: "#3f7fd8", icon: "🎓" },
-      kindergarten: { label: "Детские сады",     color: "#e28a3b", icon: "🧸" },
-      health:       { label: "Здоровье",         color: "#d9534f", icon: "✚" },
-      shop:         { label: "Магазины",         color: "#7a5bc7", icon: "🛒" },
-      food:         { label: "Кафе и рестораны", color: "#c0821c", icon: "☕" },
-      leisure:      { label: "Отдых",            color: "#3c9a5f", icon: "🌳" }
+      school:       { label: "Школы",            color: "#3f7fd8", preset: "islands#blueEducationIcon" },
+      kindergarten: { label: "Детские сады",     color: "#e28a3b", preset: "islands#orangeFamilyIcon" },
+      health:       { label: "Здоровье",         color: "#d9534f", preset: "islands#redMedicalIcon" },
+      shop:         { label: "Магазины",         color: "#7a5bc7", preset: "islands#violetShoppingIcon" },
+      food:         { label: "Кафе и рестораны", color: "#c0821c", preset: "islands#brownFoodIcon" },
+      leisure:      { label: "Отдых",            color: "#3c9a5f", preset: "islands#greenLeisureIcon" }
     };
     var home = [NEAR.village.lat, NEAR.village.lon];
-    var map = L.map(mapEl, { scrollWheelZoom: false, attributionControl: false }).setView(home, 12);
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 18 }).addTo(map);
-    L.control.attribution({ prefix: false }).addAttribution('&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>').addTo(map);
-    var houseSvg = '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 8 L27 20 H23 L29 29 H11 L17 20 H13 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M20 29 V33" stroke="currentColor" stroke-width="2"/></svg>';
-    L.marker(home, {
-      icon: L.divIcon({ className: "", html: '<div class="pin pin--home">' + houseSvg + "</div>", iconSize: [46, 46], iconAnchor: [23, 23] }),
-      zIndexOffset: 1000
-    }).addTo(map).bindPopup("<b>" + NEAR.village.name + "</b>Здесь ваш будущий участок");
+    var map = new ymaps.Map(mapEl, { center: home, zoom: 12, controls: ["zoomControl"] }, { suppressMapOpenBlock: false });
+    map.behaviors.disable("scrollZoom");
+    if (window.matchMedia("(pointer: coarse)").matches) map.behaviors.disable("drag");
+    var homeMark = new ymaps.Placemark(home, {
+      balloonContentHeader: NEAR.village.name, balloonContentBody: "Здесь ваш будущий участок", hintContent: NEAR.village.name, iconCaption: "Лесное ожерелье"
+    }, { preset: "islands#darkGreenHomeCircleIcon", zIndex: 1000 });
+    map.geoObjects.add(homeMark);
 
     var items = NEAR.points.slice().sort(function (a, b) { return a.km - b.km; }).map(function (p) {
       var c = CATS[p.cat];
       var km = p.km.toLocaleString("ru-RU") + " км";
-      var marker = L.marker([p.lat, p.lon], {
-        icon: L.divIcon({ className: "", html: '<div class="pin" style="--c:' + c.color + '">' + c.icon + "</div>", iconSize: [32, 32], iconAnchor: [16, 16] })
-      }).bindPopup("<b>" + p.name + "</b>" + km + " от посёлка");
+      var mark = new ymaps.Placemark([p.lat, p.lon], {
+        balloonContentHeader: p.name, balloonContentBody: km + " от посёлка по прямой", hintContent: p.name
+      }, { preset: c.preset });
       var li = document.createElement("li");
       li.style.setProperty("--c", c.color);
-      li.innerHTML = "<i>" + c.icon + '</i><span class="n-name"></span><span class="n-km">' + km + "</span>";
+      li.innerHTML = '<i></i><span class="n-name"></span><span class="n-km">' + km + "</span>";
       li.querySelector(".n-name").textContent = p.name;
       li.addEventListener("click", function () {
-        map.setView([p.lat, p.lon], 15, { animate: true });
-        marker.openPopup();
+        map.setCenter([p.lat, p.lon], 15, { duration: 400 }).then(function () { mark.balloon.open(); });
         if (window.matchMedia("(max-width: 899px)").matches) mapEl.scrollIntoView({ behavior: "smooth", block: "center" });
       });
-      return { p: p, marker: marker, li: li };
+      map.geoObjects.add(mark);
+      return { p: p, mark: mark, li: li };
     });
     var listEl = document.getElementById("nearList");
-    items.forEach(function (it) { listEl.appendChild(it.li); it.marker.addTo(map); });
+    items.forEach(function (it) { listEl.appendChild(it.li); });
 
     var chipsEl = document.getElementById("nearChips");
     var active = "all";
@@ -159,19 +158,25 @@
     }
     chip("all", "Все");
     Object.keys(CATS).forEach(function (k) { chip(k, CATS[k].label, CATS[k].color); });
+    function fit(list) {
+      var pts = [home].concat(list.map(function (it) { return [it.p.lat, it.p.lon]; }));
+      if (pts.length < 2) return;
+      map.setBounds(ymaps.util.bounds.fromPoints(pts), { checkZoomRange: true, zoomMargin: 36, duration: 300 });
+    }
     function apply() {
-      var shown = [home];
+      var shown = [];
       items.forEach(function (it) {
         var on = active === "all" || it.p.cat === active;
         it.li.hidden = !on;
-        if (on) { it.marker.addTo(map); shown.push([it.p.lat, it.p.lon]); } else { map.removeLayer(it.marker); }
+        it.mark.options.set("visible", on);
+        if (on) shown.push(it);
       });
       chipsEl.querySelectorAll(".chip").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.key === active ? "true" : "false"); });
-      map.closePopup();
-      map.fitBounds(L.latLngBounds(shown), { padding: [36, 36], maxZoom: 15 });
+      map.balloon.close();
+      fit(shown);
     }
-    map.fitBounds(L.latLngBounds([home].concat(items.filter(function (it) { return it.p.km < 6; }).map(function (it) { return [it.p.lat, it.p.lon]; }))), { padding: [30, 30] });
-  })();
+    fit(items.filter(function (it) { return it.p.km < 6; }));
+  });
 
   /* ── Галерея по сезонам ── */
   var tabs = document.querySelectorAll(".seasons [data-season]");
