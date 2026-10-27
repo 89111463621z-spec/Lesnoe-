@@ -61,11 +61,11 @@
 <!-- 2. О посёлке -->
 <section class="about section" id="about">
   <div class="orbs reveal" aria-hidden="true">
-    <img loading="lazy" src="assets/img/daisies-s.webp" alt="">
-    <img loading="lazy" src="assets/img/birch-sky-s.webp" alt="">
-    <img loading="lazy" src="assets/img/house-winter-s.webp" alt="">
-    <img loading="lazy" src="assets/img/summer-edge-s.webp" alt="">
-    <img loading="lazy" src="assets/img/forest-firs-s.webp" alt="">
+    <img loading="lazy" src="assets/img/orb-1.webp" alt="">
+    <img loading="lazy" src="assets/img/orb-2.webp" alt="">
+    <img loading="lazy" src="assets/img/orb-3.webp" alt="">
+    <img loading="lazy" src="assets/img/orb-4.webp" alt="">
+    <img loading="lazy" src="assets/img/orb-5.webp" alt="">
   </div>
   <h2 class="h2 reveal">Посёлок в лесу,<br>а не лес за забором</h2>
   <p class="lead reveal">«Лесное ожерелье» — камерный посёлок, где берёзы растут прямо на участках. Здесь не слышно ни города, ни трассы: только птицы и ветер в кронах. При этом школа, детские сады и амбулатория — в километре.</p>
@@ -76,27 +76,30 @@
 <section class="features section" aria-labelledby="feat-title">
   <h2 class="h2 features__title reveal" id="feat-title">Здесь хорошо жить</h2>
   <div class="features__grid">
-    <article class="tile tile--video reveal">
-      <video class="tile__media" src="assets/video/daisies.mp4" poster="assets/img/daisies-poster.webp" autoplay muted loop playsinline preload="metadata"></video>
-      <div class="tile__text"><h3>Тишина</h3><p>Ни города, ни трассы — ромашки, птицы и ветер в берёзах</p></div>
-    </article>
-    <article class="tile reveal">
-      <img class="tile__media" loading="lazy" src="assets/img/forest-summer-s.webp" srcset="assets/img/forest-summer-s.webp 720w, assets/img/forest-summer.webp 1280w" sizes="(min-width: 900px) 40vw, 100vw" alt="Летний березняк в посёлке">
-      <div class="tile__text"><h3>Лес на участке</h3><p>Большая редкость для участков к югу от Петербурга</p></div>
-    </article>
-    <article class="tile reveal">
-      <img class="tile__media" loading="lazy" src="assets/img/road-summer-s.webp" srcset="assets/img/road-summer-s.webp 405w, assets/img/road-summer.webp 788w" sizes="(min-width: 900px) 25vw, 100vw" alt="Песчаная дорога в лесу">
-      <div class="tile__text"><h3>Дороги</h3><p>Проезд к участкам в любое время года</p></div>
-    </article>
-    <article class="tile reveal">
-      <img class="tile__media" loading="lazy" src="assets/img/house-winter-s.webp" srcset="assets/img/house-winter-s.webp 405w, assets/img/house-winter.webp 788w" sizes="(min-width: 900px) 25vw, 100vw" alt="Дом соседей в березняке">
+    <article class="tile tile--tall reveal" id="neighbours">
+      <img class="tile__media" loading="lazy" src="assets/img/neighbours-s.webp" srcset="assets/img/neighbours-s.webp 720w, assets/img/neighbours.webp 1400w" sizes="(min-width: 700px) 50vw, 100vw" alt="Дом соседей среди берёз">
       <div class="tile__text"><h3>Соседи</h3><p>Уже построились, обустроили участки и сделали ландшафтный дизайн</p></div>
+    </article>
+    <article class="tile reveal">
+      <img class="tile__media" loading="lazy" src="assets/img/silence-s.webp" srcset="assets/img/silence-s.webp 720w, assets/img/silence.webp 1400w" sizes="(min-width: 700px) 30vw, 100vw" alt="Летний луг с ромашками у берёз">
+      <div class="tile__text"><h3>Тишина</h3><p>Ни города, ни трассы — только птицы и ветер в берёзах</p></div>
+    </article>
+    <article class="tile tile--top reveal">
+      <img class="tile__media" loading="lazy" src="assets/img/orzhitsy-s.webp" srcset="assets/img/orzhitsy-s.webp 720w, assets/img/orzhitsy.webp 1400w" sizes="(min-width: 700px) 30vw, 100vw" alt="Въезд в Оржицы">
+      <div class="tile__text"><h3>Рядом Оржицы</h3><p>Школа, детские сады, амбулатория и магазины — около километра</p></div>
+    </article>
+    <article class="tile reveal">
+      <img class="tile__media" loading="lazy" src="assets/img/dry-ground-s.webp" srcset="assets/img/dry-ground-s.webp 720w, assets/img/dry-ground.webp 1400w" sizes="(min-width: 700px) 30vw, 100vw" alt="Песчаная дорога вдоль леса">
+      <div class="tile__text"><h3>Сухие участки</h3><p>Вода не стоит, есть ливневая канализация</p></div>
+    </article>
+    <article class="tile reveal">
+      <img class="tile__media" loading="lazy" src="assets/img/road-summer-s.webp" srcset="assets/img/road-summer-s.webp 405w, assets/img/road-summer.webp 788w" sizes="(min-width: 700px) 30vw, 100vw" alt="Дорога в посёлке">
+      <div class="tile__text"><h3>Дороги</h3><p>Проезд к участкам в любое время года</p></div>
     </article>
   </div>
   <ul class="ticks reveal">
     <li>Огороженный периметр</li>
     <li>Ливневая канализация</li>
-    <li>Сухие участки</li>
     <li>Всесезонные дороги</li>
   </ul>
 </section>
@@ -148,17 +151,9 @@
   <article class="why__card reveal">
     <img loading="lazy" src="assets/img/window-s.webp" srcset="assets/img/window-s.webp 405w, assets/img/window.webp 788w" sizes="(min-width: 900px) 40vw, 100vw" alt="Вид на лес из панорамного окна гостиной">
     <div>
-      <p class="eyebrow">Лес на участке</p>
+      <p class="eyebrow">Главное в «Лесном ожерелье»</p>
       <h3>Утро начинается с&nbsp;леса за окном</h3>
       <p>Берёзы растут прямо на участках. Не нужно ждать двадцать лет, пока вырастет сад: из окна гостиной уже виден лес, а тень и свежий воздух — с первого дня.</p>
-    </div>
-  </article>
-  <article class="why__card why__card--rev reveal">
-    <img loading="lazy" src="assets/img/dry-ground-s.webp" srcset="assets/img/dry-ground-s.webp 720w, assets/img/dry-ground.webp 1400w" sizes="(min-width: 900px) 45vw, 100vw" alt="Песчаная дорога вдоль леса">
-    <div>
-      <p class="eyebrow">Сухие участки</p>
-      <h3>Вода не стоит</h3>
-      <p>На участках нет заболоченных и мокрых мест. В посёлке сделана ливневая канализация.</p>
     </div>
   </article>
 </section>
@@ -178,7 +173,7 @@
     </div>
     <div class="location__foot">
       <a class="btn btn--dark" href="https://yandex.ru/maps/org/kp_lesnoye_ozherelye/209354364429/" target="_blank" rel="noopener">Построить маршрут</a>
-      <p class="location__note">Расстояния — по прямой, данные OpenStreetMap.</p>
+      <p class="location__note">Расстояния до мест — по прямой.</p>
     </div>
   </div>
 </section>
@@ -186,14 +181,25 @@
 <!-- 7. Галерея -->
 <section class="gallery section" id="gallery">
   <h2 class="h2 reveal">Посёлок в разные сезоны</h2>
-  <div class="gallery__grid">
-    <img class="g-wide" loading="lazy" src="assets/img/forest-firs-s.webp" srcset="assets/img/forest-firs-s.webp 720w, assets/img/forest-firs.webp 1400w" sizes="(min-width: 900px) 66vw, 100vw" alt="Смешанный лес весной">
-    <img loading="lazy" src="assets/img/frost-birch-s.webp" alt="Берёзы в инее">
-    <img loading="lazy" src="assets/img/backlight-s.webp" alt="Лес против солнца">
-    <img loading="lazy" src="assets/img/winter-road-s.webp" alt="Дорога посёлка зимой">
-    <img loading="lazy" src="assets/img/plot-forest-2-s.webp" alt="Березняк на участке">
-    <img class="g-wide" loading="lazy" src="assets/img/plot-forest-s.webp" srcset="assets/img/plot-forest-s.webp 720w, assets/img/plot-forest.webp 1400w" sizes="(min-width: 900px) 66vw, 100vw" alt="Берёзы на участке весной">
-    <img loading="lazy" src="assets/img/frost-edge-s.webp" alt="Опушка в инее">
+  <div class="seasons" role="tablist" aria-label="Сезон">
+    <button type="button" role="tab" aria-selected="true" data-season="summer">Лето</button>
+    <button type="button" role="tab" aria-selected="false" data-season="spring">Весна</button>
+    <button type="button" role="tab" aria-selected="false" data-season="winter">Зима</button>
+  </div>
+  <div class="season" data-season="summer">
+      <img loading="lazy" src="assets/img/summer-1-s.webp" srcset="assets/img/summer-1-s.webp 720w, assets/img/summer-1.webp 1600w" sizes="(min-width: 700px) 33vw, 100vw" alt="">
+      <img loading="lazy" src="assets/img/summer-2-s.webp" srcset="assets/img/summer-2-s.webp 720w, assets/img/summer-2.webp 1600w" sizes="(min-width: 700px) 33vw, 100vw" alt="">
+      <img loading="lazy" src="assets/img/summer-3-s.webp" srcset="assets/img/summer-3-s.webp 720w, assets/img/summer-3.webp 1600w" sizes="(min-width: 700px) 33vw, 100vw" alt="">
+  </div>
+  <div class="season" data-season="spring" hidden>
+      <img loading="lazy" src="assets/img/spring-1-s.webp" srcset="assets/img/spring-1-s.webp 720w, assets/img/spring-1.webp 1600w" sizes="(min-width: 700px) 33vw, 100vw" alt="">
+      <img loading="lazy" src="assets/img/spring-2-s.webp" srcset="assets/img/spring-2-s.webp 720w, assets/img/spring-2.webp 1600w" sizes="(min-width: 700px) 33vw, 100vw" alt="">
+      <img loading="lazy" src="assets/img/spring-3-s.webp" srcset="assets/img/spring-3-s.webp 720w, assets/img/spring-3.webp 1600w" sizes="(min-width: 700px) 33vw, 100vw" alt="">
+  </div>
+  <div class="season" data-season="winter" hidden>
+      <img loading="lazy" src="assets/img/winter-1-s.webp" srcset="assets/img/winter-1-s.webp 720w, assets/img/winter-1.webp 1600w" sizes="(min-width: 700px) 33vw, 100vw" alt="">
+      <img loading="lazy" src="assets/img/winter-2-s.webp" srcset="assets/img/winter-2-s.webp 720w, assets/img/winter-2.webp 1600w" sizes="(min-width: 700px) 33vw, 100vw" alt="">
+      <img loading="lazy" src="assets/img/winter-3-s.webp" srcset="assets/img/winter-3-s.webp 720w, assets/img/winter-3.webp 1600w" sizes="(min-width: 700px) 33vw, 100vw" alt="">
   </div>
 </section>
 

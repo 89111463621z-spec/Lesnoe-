@@ -177,16 +177,17 @@ a { color: inherit; }
 .tile__text { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px; }
 .tile h3 { font: 500 clamp(22px, 6vw, 30px)/1.15 var(--font-head); text-transform: uppercase; margin: 0 0 6px; color: #fff; }
 .tile p { margin: 0; font-weight: 500; color: rgba(255,255,255,.92); max-width: 360px; }
-.tile--video { min-height: 480px; }
+.tile--tall { min-height: 460px; }
+.tile--top .tile__text { top: 0; bottom: auto; }
+.tile--top::after { background: linear-gradient(0deg, rgba(0,0,0,0) 45%, rgba(0,0,0,.6) 100%); }
+.tile--top .tile__media { object-position: center 70%; }
 @media (hover: hover) { .tile:hover .tile__media { transform: scale(1.05); } }
 @media (min-width: 700px) {
   .features__grid { grid-template-columns: 1fr 1fr; }
-  .tile--video { grid-row: span 2; min-height: 620px; }
+  .tile--tall { grid-row: span 2; min-height: 0; }
 }
 @media (min-width: 1100px) {
-  .features__grid { grid-template-columns: 1.1fr 1fr 1fr; grid-template-rows: 320px 320px; }
-  .tile--video { grid-row: span 2; min-height: 0; }
-  .tile:nth-child(2) { grid-column: span 2; }
+  .features__grid { grid-template-columns: 1.15fr 1fr 1fr; grid-template-rows: 330px 330px; }
   .tile { min-height: 0; }
 }
 .ticks {
@@ -331,17 +332,22 @@ a { color: inherit; }
 .leaflet-popup-content { font: 500 14px/1.4 var(--font-body); margin: 10px 14px; }
 .leaflet-popup-content b { display: block; font-weight: 700; }
 .leaflet-container { font-family: var(--font-body); }
-.map-tiles { filter: saturate(.55) sepia(.12) brightness(1.03); }
 
-/* ── Галерея ── */
+/* ── Галерея по сезонам ── */
 .gallery { max-width: 1280px; margin: 0 auto; }
-.gallery .h2 { text-align: center; margin-bottom: 32px; }
-.gallery__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; grid-auto-rows: 150px; }
-.gallery__grid img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-l); }
-.gallery__grid .g-wide { grid-column: span 2; }
-.gallery__grid img:last-child { grid-column: span 2; }
-@media (min-width: 700px) { .gallery__grid img:last-child { grid-column: auto; } }
-@media (min-width: 700px) { .gallery__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; grid-auto-rows: clamp(170px, 18vw, 250px); } }
+.gallery .h2 { text-align: center; margin-bottom: 24px; }
+.seasons { display: flex; justify-content: center; gap: 6px; margin: 0 auto 20px; padding: 5px; width: fit-content; border: 1px solid var(--line); border-radius: 999px; }
+.seasons button { border: 0; background: none; color: var(--mist); font: 600 15px/1 var(--font-body); padding: 12px 22px; border-radius: 999px; cursor: pointer; transition: background .25s, color .25s; }
+.seasons button[aria-selected="true"] { background: var(--paper); color: var(--ink); }
+.season { display: grid; gap: 8px; grid-template-columns: 1fr 1fr; animation: fadein .5s ease; }
+.season[hidden] { display: none; }
+.season img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-l); aspect-ratio: 4 / 5; }
+.season img:first-child { grid-column: span 2; aspect-ratio: 4 / 3; }
+@media (min-width: 700px) {
+  .season { grid-template-columns: 1.4fr 1fr 1fr; gap: 12px; }
+  .season img, .season img:first-child { grid-column: auto; aspect-ratio: 3 / 4; }
+}
+@keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
 
 /* ── Заявка ── */
 .request__card { display: grid; gap: 8px; }

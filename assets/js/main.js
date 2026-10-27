@@ -106,21 +106,19 @@
   /* ── Карта «Что рядом» ── */
   var NEAR = window.NEARBY;
   var mapEl = document.getElementById("nearMap");
-  if (NEAR && window.L && mapEl) {
+  if (NEAR && window.L && mapEl) (function () {
     var CATS = {
-      school:       { label: "Школы",          color: "#3f7fd8", icon: "🎓" },
-      kindergarten: { label: "Детские сады",   color: "#e28a3b", icon: "🧸" },
-      health:       { label: "Здоровье",       color: "#d9534f", icon: "✚" },
-      shop:         { label: "Магазины",       color: "#7a5bc7", icon: "🛒" },
+      school:       { label: "Школы",            color: "#3f7fd8", icon: "🎓" },
+      kindergarten: { label: "Детские сады",     color: "#e28a3b", icon: "🧸" },
+      health:       { label: "Здоровье",         color: "#d9534f", icon: "✚" },
+      shop:         { label: "Магазины",         color: "#7a5bc7", icon: "🛒" },
       food:         { label: "Кафе и рестораны", color: "#c0821c", icon: "☕" },
-      leisure:      { label: "Отдых",          color: "#3c9a5f", icon: "🌳" }
+      leisure:      { label: "Отдых",            color: "#3c9a5f", icon: "🌳" }
     };
     var home = [NEAR.village.lat, NEAR.village.lon];
-    var map = L.map(mapEl, { scrollWheelZoom: false, tap: true, zoomControl: true }).setView(home, 12);
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 18, className: "map-tiles",
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
+    var map = L.map(mapEl, { scrollWheelZoom: false, attributionControl: false }).setView(home, 12);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 18 }).addTo(map);
+    L.control.attribution({ prefix: false }).addAttribution('&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>').addTo(map);
     var houseSvg = '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 8 L27 20 H23 L29 29 H11 L17 20 H13 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M20 29 V33" stroke="currentColor" stroke-width="2"/></svg>';
     L.marker(home, {
       icon: L.divIcon({ className: "", html: '<div class="pin pin--home">' + houseSvg + "</div>", iconSize: [46, 46], iconAnchor: [23, 23] }),
@@ -138,14 +136,14 @@
       li.innerHTML = "<i>" + c.icon + '</i><span class="n-name"></span><span class="n-km">' + km + "</span>";
       li.querySelector(".n-name").textContent = p.name;
       li.addEventListener("click", function () {
-        map.flyTo([p.lat, p.lon], 14, { duration: .6 });
+        map.setView([p.lat, p.lon], 15, { animate: true });
         marker.openPopup();
         if (window.matchMedia("(max-width: 899px)").matches) mapEl.scrollIntoView({ behavior: "smooth", block: "center" });
       });
       return { p: p, marker: marker, li: li };
     });
     var listEl = document.getElementById("nearList");
-    items.forEach(function (it) { listEl.appendChild(it.li); });
+    items.forEach(function (it) { listEl.appendChild(it.li); it.marker.addTo(map); });
 
     var chipsEl = document.getElementById("nearChips");
     var active = "all";
@@ -153,28 +151,36 @@
       var b = document.createElement("button");
       b.type = "button";
       b.className = "chip";
+      b.dataset.key = key;
       b.setAttribute("aria-pressed", key === active ? "true" : "false");
       b.innerHTML = (color ? '<i style="--c:' + color + '"></i>' : "") + label;
       b.addEventListener("click", function () { active = key; apply(); });
-      b.dataset.key = key;
       chipsEl.appendChild(b);
     }
     chip("all", "Все");
     Object.keys(CATS).forEach(function (k) { chip(k, CATS[k].label, CATS[k].color); });
     function apply() {
-      var shown = [L.latLng(home)];
+      var shown = [home];
       items.forEach(function (it) {
         var on = active === "all" || it.p.cat === active;
         it.li.hidden = !on;
-        if (on) { it.marker.addTo(map); shown.push(it.marker.getLatLng()); } else { map.removeLayer(it.marker); }
+        if (on) { it.marker.addTo(map); shown.push([it.p.lat, it.p.lon]); } else { map.removeLayer(it.marker); }
       });
       chipsEl.querySelectorAll(".chip").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.key === active ? "true" : "false"); });
       map.closePopup();
-      map.flyToBounds(L.latLngBounds(shown), { padding: [36, 36], maxZoom: 14, duration: .6 });
+      map.fitBounds(L.latLngBounds(shown), { padding: [36, 36], maxZoom: 15 });
     }
-    items.forEach(function (it) { it.marker.addTo(map); });
-    map.fitBounds(L.latLngBounds([L.latLng(home)].concat(items.filter(function (it) { return it.p.km < 6; }).map(function (it) { return it.marker.getLatLng(); }))), { padding: [30, 30] });
-  }
+    map.fitBounds(L.latLngBounds([home].concat(items.filter(function (it) { return it.p.km < 6; }).map(function (it) { return [it.p.lat, it.p.lon]; }))), { padding: [30, 30] });
+  })();
+
+  /* ── Галерея по сезонам ── */
+  var tabs = document.querySelectorAll(".seasons [data-season]");
+  tabs.forEach(function (t) {
+    t.addEventListener("click", function () {
+      tabs.forEach(function (o) { o.setAttribute("aria-selected", o === t ? "true" : "false"); });
+      document.querySelectorAll(".season").forEach(function (g) { g.hidden = g.dataset.season !== t.dataset.season; });
+    });
+  });
 
   /* ── Шапка при прокрутке ── */
   var bar = document.querySelector(".topbar");
