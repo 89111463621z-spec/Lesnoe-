@@ -207,7 +207,6 @@ a { color: inherit; }
 .marquee__group { display: flex; align-items: center; flex-shrink: 0; }
 .marquee span { font: 300 clamp(30px, 7vw, 72px)/1.2 var(--font-head); text-transform: uppercase; white-space: nowrap; color: rgba(243,239,230,.9); padding: 0 clamp(28px, 4vw, 60px); }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (hover: hover) { .marquee:hover .marquee__track { animation-play-state: paused; } }
 
 /* ── Светлые карточки-секции ── */
 .plan__card, .location__card, .request__card {
@@ -375,6 +374,7 @@ a { color: inherit; }
 .reveal.is-in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; transition: none; }
-  .hero__media img, .plot--free, .marquee__track { animation: none; }
+  .hero__media img, .plot--free { animation: none; }
+  .marquee__track { animation-duration: 120s; }
   html { scroll-behavior: auto; }
 }
